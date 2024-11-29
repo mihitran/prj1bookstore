@@ -1,0 +1,11 @@
+mixin product-item(product)
+  .product-item
+    a(href="#")
+      .product-item__image
+        img(src=product.thumbnail alt=product.title)
+      .product-item__content
+        h3.product-item__title #{product.title}
+        .product-item__info
+          .product-item__info-item Author: <b>#{product.author}</b>
+          .product-item__info-item Desc: <b>#{product.description}</b>
+        .product-item__price #{product.price} $

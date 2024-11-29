@@ -1,0 +1,87 @@
+extends ../../layouts/default.pug
+include ../../mixins/product-item.pug
+
+block main 
+    //- Breadcrumb 
+    .breadcrumb 
+        .container
+            nav.breadcrumb-wrap
+                ul
+                    li
+                        a(href="#") Home
+                    li
+                        a(href="#") Books
+    //- End Breadcrumb
+
+    //- Section 4
+    .section-4
+        .container 
+            .section-4__wrap 
+                .section-4__left
+                    .box-filter 
+                        .box-filter__title 
+                            img(src="assets/images/icon-filter.svg")
+                            | Bộ lọc
+                        .box-filter__group 
+                            button(class = "box-filter__group-label" category = "") Tất cả
+                            .box-filter__group-list
+                                //- .box-filter__group-item
+                                //-     input(type="checkbox" id = "")
+                                //-     label(for="") Đực
+                                //- .box-filter__group-item
+                                //-     input(type="checkbox" id = "")
+                                //-     label(for="") Cái
+                        .box-filter__group
+                            button(class = "box-filter__group-label" category = "Dystopian") Dystopian
+                            //- .box-filter__group-list
+                            //-     .box-filter__group-item
+                            //-         input(type="checkbox" id = "")
+                            //-         label(for="") Xám
+                            //-     .box-filter__group-item
+                            //-         input(type="checkbox" id = "")
+                            //-         label(for="") Đen
+                            //-     .box-filter__group-item
+                            //-         input(type="checkbox" id = "")
+                            //-         label(for="") Trắng
+                        .box-filter__group 
+                            button(class = "box-filter__group-label" category = "Classic Fiction") Classic Fiction
+                            .box-filter__group-list
+                                //- .box-filter__group-item
+                                //-     input(type="checkbox" id = "")
+                                //-     label(for="") Nhỏ
+                                //- .box-filter__group-item
+                                //-     input(type="checkbox" id = "")
+                                //-     label(for="") Vừa
+                                //- .box-filter__group-item
+                                //-     input(type="checkbox" id = "")
+                                //-     label(for="") Lớn                            
+                .section-4__right                 
+                    .section-4__head
+                        h2.section-4__title Books
+                        .box-filter__title 
+                            //- img(src="assets/images/icon-filter.svg")
+                            | Bộ lọc
+
+                    .section-4__list
+                        each product in products
+                            +product-item(product)
+
+                    //- nav.pagination
+                        ul      
+                            li 
+                                a(href="#" class = "pagination__item") <i class="fa-solid fa-arrow-left"></i>
+                            li 
+                                a(href="#" class = "pagination__item pagination__item--active") 1
+                            li 
+                                a(href="#" class = "pagination__item") 2
+                            li 
+                                a(href="#" class = "pagination__item") 3
+                            li 
+                                a(href="#" class = "pagination__item") 4
+                            li 
+                                a(href="#" class = "pagination__item") ...
+                            li 
+                                a(href="#" class = "pagination__item") 28
+                            li 
+                                a(href="#" class = "pagination__item") <i class="fa-solid fa-arrow-right"></i>
+    //- End Section 4
