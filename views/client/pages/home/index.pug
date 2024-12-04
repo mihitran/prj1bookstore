@@ -1,76 +1,28 @@
 extends ../../layouts/default.pug
-include ../../mixins/product-item.pug
-  
+include ../../mixins/box-head.pug
+include ../../mixins/product-item-detail.pug
 block main
-    //- Section 1
-    section.section-1
-        .container
-            .section-1__wrap
-                .section-1__content
-                    h1.section-1__title
-                        .section-1__title-main Books open doors
-                        .section-1__title-sub Reading nourishes the mind and soul!
-                    .section-1__desc Each book is a journey into a new world, offering fresh perspectives and ideas that challenge your thinking, broaden your understanding, and enrich your life in ways you never imagined.
-                    .section-1__buttons
-                        a(href="#" class="button-outline")
-                            | Giới Thiệu
-                            i(class="fa-regular fa-circle-play")
-                        a(href="#" class="button") Khám Phá Ngay
-                
-                .section-1__image
-                    div(class = "swiper mySwiper")
-                        div(class = "swiper-wrapper")
-                            div(class="swiper-slide") 
-                                img(src="assets/images/index/book1.png" class="section-1__image-main")
-                            div(class="swiper-slide") 
-                                img(src="assets/images/index/book1.png" class="section-1__image-main")
-                            div(class="swiper-slide") 
-                                img(src="assets/images/index/book1.png" class="section-1__image-main")
-                        div(class = "swiper-pagination")
-    //- End Section 1
-
-    //- Section 2
-    .section-2
-        .container
-            .box-head
-                .box-head__left
-                    .box-head__sub-title What's new?
-                    h2.box-head__title Explore some of our book titles.
-                .box-head__right
-                    a(href="#" class="button-outline")
-                        | Xem thêm
-                        i(class="fa-solid fa-angle-right")
-            .section-2__wrap
-                each product in products
-                    +product-item(product)
-            .section-2__button-bottom
-                a(href="#" class="button-outline")
-                    | See more
-                    i(class="fa-solid fa-angle-right")
-    //- End Section 2 
-
-    //- Section 4
-    //- .section-4
-        .container
-            .box-head
-                .box-head__left
-                    .box-head__sub-title Có thể bạn đã biết?
-                    .box-head__title Kiến thức thú cưng hữu ích
-                .box-head__right
-                    a(href="#" class="button-outline")
-                        | Xem thêm
-                        i(class="fa-solid fa-angle-right")
-            .section-4__wrap
-                .blog-item
-                    a(href="#")
-                        .blog-item__image
-                            img(src="assets/images/index/book1.png" alt="")
-                        .blog-item__content
-                            .blog-item__tag Kiến thức thú cưng
-                            h3.blog-item__title Pomeranian là gì? Cách nhận biết chó Pomeranian
-                            p.blog-item__desc Pomeranian hay còn gọi là chó Pomeranian (chó Pom) luôn nằm trong top những thú cưng dễ thương nhất. Không chỉ vậy, giống chó xiếc nhỏ nhắn, đáng yêu, thông minh, thân thiện và khéo léo.
-                .section-4__button-bottom
-                    a(href="#" class="button-outline")
-                        | Xem thêm
-                        i(class="fa-solid fa-angle-right")
-    //- End Section 4
+  .container.my-3
+    +box-head("Sản phẩm nổi bật")
+    .row
+      each item in productsFeatured
+        +product-item(item)
+  
+  
+  .container.my-3
+    +box-head("Sản phẩm mới")
+    .row
+      each item in productsNew
+        +product-item(item)
+  
+  .container.my-3
+    +box-head("Giảm giá nhiều")
+    .row
+      each item in productsDiscount
+        +product-item(item)
+  
+  .container.my-3
+    +box-head("Sản phẩm gợi ý")
+    .row
+      each item in productsChoose
+        +product-item(item)

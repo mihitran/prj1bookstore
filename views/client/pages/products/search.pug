@@ -1,0 +1,9 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product-item-detail.pug
+block main
+  .container.my-3
+    +box-head(pageTitle)
+    .row
+      each item in products
+        +product-item(item)
