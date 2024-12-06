@@ -48,8 +48,8 @@ module.exports.index = async (req, res) => {
     .find({
       _id: {
         $in: [
-          "66db039c34f3f34435263b0b",
-          "66e1959e5a6d26e7383dacb1"
+          "674f37f3de2b0c490a13be85",
+          "674f37f3de2b0c490a13be86"
         ]
       },
       deleted: false,

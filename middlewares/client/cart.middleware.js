@@ -12,3 +12,19 @@ module.exports.cart = async (req, res, next) => {
   }
   next();
 }
+
+// const Cart = require("../../models/cart.model");
+// module.exports.cartId = async (req, res, next) => {
+//   console.log(req.cookies.cartId);
+//   if(!req.cookies.cartId){
+//     const cart = new Cart();
+//     await cart.save();
+//     const expiresDay = 365 * 24 * 60 * 60 * 1000;
+//     res.cookie("cartId", cart.id), {
+//       expires: new Date(Date.now() + expiresDay)
+//     };
+//   } else {
+//     //Lay ra
+//   }
+//   next();
+// }
