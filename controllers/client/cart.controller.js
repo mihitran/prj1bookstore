@@ -13,6 +13,7 @@ module.exports.index = async (req, res) => {
       deleted: false,
       status: "active"
     });
+    console.log(infoItem);
     item.thumbnail = infoItem.thumbnail;
     item.title = infoItem.title;
     item.slug = infoItem.slug;

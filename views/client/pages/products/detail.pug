@@ -10,17 +10,24 @@ block main
             img(src=product.thumbnail, alt=product.title)
         .col-6
           h1(class="inner-title") #{product.title}
-
           if (product.category)
             div(class="inner-category")
               span Danh mục: 
               a(href=`/products/${product.category.slug}`) #{product.category.title}
+              
+          // Hiển thị tác giả nếu có
+          if (product.authors && product.authors.length > 0 && product.authors != "No authors available")
+            div(class="inner-authors")
+              span Tác giả: 
+              span= product.authors.join(", ")
 
           if (product.priceNew)
-            div(class="inner-price-new") #{product.priceNew}$
+            div(class="inner-price-new") 
+              | #{(parseFloat(product.priceNew) || 0).toLocaleString('vi-VN').replace(/,/g, ',')}đ
 
-          if (product.price)
-            div(class="inner-price-old") #{product.price}$
+          if (product.price != product.priceNew)
+            div(class="inner-price-old") 
+              | #{(parseFloat(product.price) || 0).toLocaleString('vi-VN').replace(/,/g, ',')}đ
 
           if (product.discountPercentage)
             div(class="inner-percent") Giảm tới <span>#{product.discountPercentage}%</span>
@@ -52,3 +59,4 @@ block main
         .col-12
           +box-head("Mô tả sản phẩm")
           .inner-desc !{product.description}
+

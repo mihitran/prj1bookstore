@@ -1,4 +1,3 @@
-
 // table-cart
 const tableCart = document.querySelector("[table-cart]");
 if(tableCart) {

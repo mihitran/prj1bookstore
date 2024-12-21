@@ -7,6 +7,13 @@ mixin product-item(item)
       .inner-content
         h3.inner-title
           a(href=`/products/detail/${item.slug}`) #{item.title}
-        .inner-price-new #{item.priceNew}$
-        .inner-price-old #{item.price}$
-        .inner-discount -#{item.discountPercentage}%
+        .inner-price-new 
+          | #{(parseFloat(item.priceNew) || 0).toLocaleString('vi-VN')}đ
+        if(item.price != item.priceNew)
+          .inner-price-old 
+            | #{(parseFloat(item.price) || 0).toLocaleString('vi-VN')}đ
+          .inner-discount 
+            | -#{(parseFloat(item.discountPercentage) || 0).toLocaleString('vi-VN')}%
+
+
+

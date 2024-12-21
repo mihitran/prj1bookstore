@@ -1,7 +1,7 @@
 mixin sub-category(items)
   ul
     each item in items
-      li
-        a(href=`/products/${item.slug}`) #{item.title}
-        if(item.children && item.children.length > 0)
-          +sub-category(item.children)
+      if(item.children && item.children.length > 0)
+        li
+          a(href=`/products/${item.slug}`) #{item.title}
+            +sub-category(item.children)
