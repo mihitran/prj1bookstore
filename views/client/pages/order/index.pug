@@ -42,6 +42,16 @@ block main
             action="/order"
             method="POST"
           )
+            // Kiểm tra xem có phải luồng "Mua ngay" không
+            if isBuyNow
+              each item in products
+                input(type="hidden" name="productId" value=item.productId)
+                input(type="hidden" name="quantity" value=item.quantity)
+            else
+              each item in products
+                input(type="hidden" name="productId" value=item.productId)
+                input(type="hidden" name="quantity" value=item.quantity)
+            
             div(class="form-group")
               label(for="fullName") Họ tên
               input(
