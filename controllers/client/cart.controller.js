@@ -71,6 +71,8 @@ module.exports.delete = async (req, res) => {
   });
   res.redirect("back");
 }
+
+
 module.exports.updatePatch = async (req, res) => {
   const cartId = req.cookies.cartId;
   const product = req.body;
@@ -90,34 +92,3 @@ module.exports.updatePatch = async (req, res) => {
     message: "Cập nhật thành công!"
   });
 }
-
-
-
-// const Cart = require("../../models/cart.model");
-// module.exports.addPost = async (req, res) => {
-//   const productId  = req.params.id;
-//   const quantity = req.body.quantity;
-//   const cartId = req.cookies.cartId;
-
-//   console.log(productId);
-//   console.log(quantity);
-//   console.log(cartId);
-
-//   const objectCart = {
-//     productId: productId,
-//     quantity: quantity
-//   }
-
-//   await Cart.updateOne(
-//     {
-//       _id: cartId
-//     },
-//     {
-//       $push: { products: objectCart }
-//     }
-//   );
-
-//   console.log(objectCart);
-
-//   res.send("OK");
-// }

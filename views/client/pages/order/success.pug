@@ -48,8 +48,8 @@ block main
                       img(src=item.thumbnail, alt=item.title width="80px")
                     td
                       a(href=`/products/detail/${item.slug}`) #{item.title}
-                    td #{item.priceNew}$
+                    td #{Number(item.priceNew).toLocaleString('vi-VN')}đ
                     td #{item.quantity}
-                    td #{item.total.toLocaleString()}$
+                    td #{item.total.toLocaleString('vi-VN')}đ
             
-            h3(class="text-right") Tổng đơn hàng: #{total.toLocaleString()}$
+            h3(class="text-right") Tổng đơn hàng: #{total.toLocaleString('vi-VN')}đ

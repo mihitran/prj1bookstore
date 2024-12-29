@@ -5,7 +5,52 @@ include ../../mixins/product-item-detail.pug
 block main
   .container.my-3
     +box-head(pageTitle)
+    // Kiểm tra xem có alertMessage không và hiển thị alert nếu có
+    if alertMessage
+      script(type="text/javascript").
+        // Lưu lại trang trước đó
+        var previousPage = document.referrer;
+        // Hiển thị alert
+        alert("#{alertMessage}");
+        // Sau khi bấm OK, chuyển hướng lại về trang trước đó
+        window.location.href = previousPage;
     .row
       //- console.log(products)
       each item in products
         +product-item(item)
+  nav(class="mt-3")
+    ul(class="pagination")
+      // Nút "Trang trước"
+      if (currentPage > 1)
+        li(class="page-item")
+          button(class="page-link" button-pagination=currentPage-1) Trang trước
+
+      // Hiển thị trang 1
+      li(class="page-item")
+        button(class="page-link" button-pagination=1) 1
+
+      // Dấu "..." nếu cần
+      if (currentPage > 4)
+        li(class="page-item")
+          span(class="page-link") ...
+
+      // Hiển thị các trang xung quanh currentPage
+      - for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPage - 1, currentPage + 1); i++)
+        li(class=`page-item ${i === currentPage ? 'active' : ''}`)
+          button(class="page-link" button-pagination=i) #{i}
+
+      // Dấu "..." nếu cần
+      if (currentPage < totalPage - 3)
+        li(class="page-item")
+          span(class="page-link") ...
+
+      // Hiển thị trang cuối
+      if (totalPage > 1)
+        li(class="page-item")
+          button(class="page-link" button-pagination=totalPage) #{totalPage}
+
+      // Nút "Kế tiếp"
+      if (currentPage < totalPage)
+        li(class="page-item")
+          button(class="page-link" button-pagination=currentPage+1) Kế tiếp
+

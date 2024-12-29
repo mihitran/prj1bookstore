@@ -26,3 +26,28 @@ if(tableCart) {
   })
 }
 // End table-cart
+
+// Phân trang
+const listButtonPagination = document.querySelectorAll("[button-pagination]");
+if(listButtonPagination.length > 0) {
+  let url = new URL(location.href); // Nhân bản url
+  listButtonPagination.forEach(button => {
+    button.addEventListener("click", () => {
+      const page = button.getAttribute("button-pagination");
+      if(page) {
+        url.searchParams.set("page", page);
+      } else {
+        url.searchParams.delete("page");
+      }
+  
+      location.href = url.href;
+    })
+  })
+  // Hiển thị trang mặc định
+  const pageCurrent = url.searchParams.get("page") || 1;
+  const buttonCurrent = document.querySelector(`[button-pagination="${pageCurrent}"]`);
+  if(buttonCurrent) {
+    buttonCurrent.parentNode.classList.add("active");
+  }
+}
+// Hết Phân trang
