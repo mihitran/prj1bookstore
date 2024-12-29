@@ -48,13 +48,21 @@ module.exports.orderPost = async (req, res) => {
     });
 
     if (product) {
+      const quantity = parseInt(req.body.quantity, 10); // Số lượng
+      const finalPrice = parseFloat(product.priceNew) || product.price; // Giá mới nếu có, nếu không có thì dùng giá gốc
+      const total = finalPrice * quantity; // Thành tiền (giá mới x số lượng)
+
+      // Thêm sản phẩm vào đơn hàng
       const productOrder = {
         productId: product._id,
-        price: product.price,
-        discountPercentage: product.discountPercentage,
-        quantity: req.body.quantity
+        price: finalPrice, // Giá mới
+        discountPercentage: product.discountPercentage || 0, // Phần trăm giảm giá
+        quantity: quantity, // Số lượng
+        finalPrice: finalPrice, // Giá sau giảm (nếu có)
+        total: total // Thành tiền
       };
-      dataOrder.products.push(productOrder);  // Thêm sản phẩm từ "Mua ngay"
+
+      dataOrder.products.push(productOrder); // Thêm sản phẩm từ "Mua ngay"
     }
   } else {
     // Nếu không có sản phẩm từ "Mua ngay", lấy sản phẩm từ giỏ hàng
@@ -69,13 +77,17 @@ module.exports.orderPost = async (req, res) => {
           _id: item.productId
         });
 
-        const product = {
+        const finalPrice = parseFloat(infoItem.priceNew) || infoItem.price; // Sử dụng giá mới nếu có, nếu không có thì dùng giá gốc
+        const total = finalPrice * item.quantity; // Thành tiền (giá mới x số lượng)
+
+        dataOrder.products.push({
           productId: item.productId,
-          price: infoItem.price,
-          discountPercentage: infoItem.discountPercentage,
-          quantity: item.quantity
-        };
-        dataOrder.products.push(product);
+          price: finalPrice, // Giá mới
+          discountPercentage: infoItem.discountPercentage || 0, // Phần trăm giảm giá
+          quantity: item.quantity, // Số lượng
+          finalPrice: finalPrice, // Giá sau giảm (nếu có)
+          total: total // Thành tiền
+        });
       }
     }
   }
@@ -95,6 +107,8 @@ module.exports.orderPost = async (req, res) => {
 
   res.redirect(`/order/success/${newOrder.id}`);
 };
+
+
 
 
 module.exports.success = async (req, res) => {
@@ -139,29 +153,32 @@ module.exports.orderNow = async (req, res) => {
     return res.redirect("/"); // Nếu sản phẩm không tồn tại, chuyển về trang chủ
   }
 
-  // Tính toán tổng tiền
-  let total = product.price * quantity;
+  // Tính toán giá sau giảm (priceNew) và tổng tiền (total)
+  let priceNew = product.price; // Giá gốc
   if (product.discountPercentage > 0) {
-    total = (1 - product.discountPercentage / 100) * total;
-    total = total.toFixed(0);
+    priceNew = (1 - product.discountPercentage / 100) * product.price;
+    priceNew = priceNew.toFixed(0); // Làm tròn giá mới
   }
 
-  // Render trang order chỉ với 1 sản phẩm
+  const total = priceNew * quantity; // Thành tiền (giá mới x số lượng)
+
+  // Render trang order chỉ với 1 sản phẩm, đảm bảo giá và thành tiền được truyền đúng
   res.render("client/pages/order/index", {
     pageTitle: "Đặt hàng",
     products: [{
       productId: product._id,
       title: product.title,
       thumbnail: product.thumbnail,
-      priceNew: total,
+      priceNew: priceNew, // Truyền giá mới sau giảm
       quantity: quantity,
-      total: total,
+      total: total, // Thành tiền (có thể dùng trong trường hợp cần)
       slug: product.slug
     }],
-    total: total,
+    total: total, // Tổng tiền cho sản phẩm (tổng thành tiền)
     isBuyNow: true  // Đánh dấu đây là luồng "Mua ngay"
   });
 };
+
 
 
 
