@@ -31,81 +31,176 @@ module.exports.index = async (req, res) => {
     total: total
   });
 };
+
+// module.exports.orderPost = async (req, res) => {
+//   const cartId = req.cookies.cartId;
+//   const order = req.body;
+//   const dataOrder = {
+//     fullName: order.fullName,
+//     phone: order.phone,
+//     address: order.address,
+//     products: []
+//   };
+
+//   // Kiểm tra xem có sản phẩm từ "Mua ngay" không
+//   if (req.body.productId && req.body.quantity) {
+//     const product = await Product.findOne({
+//       _id: req.body.productId
+//     });
+
+//     if (product) {
+//       const quantity = parseInt(req.body.quantity, 10); // Số lượng
+//       const finalPrice = parseFloat(product.priceNew) || product.price; // Giá mới nếu có, nếu không có thì dùng giá gốc
+//       const total = finalPrice * quantity; // Thành tiền (giá mới x số lượng)
+
+//       // Thêm sản phẩm vào đơn hàng
+//       const productOrder = {
+//         productId: product._id,
+//         price: finalPrice, // Giá mới
+//         discountPercentage: product.discountPercentage || 0, // Phần trăm giảm giá
+//         quantity: quantity, // Số lượng
+//         finalPrice: finalPrice, // Giá sau giảm (nếu có)
+//         total: total // Thành tiền
+//       };
+
+//       dataOrder.products.push(productOrder); // Thêm sản phẩm từ "Mua ngay"
+//     }
+//   } else {
+//     // Nếu không có sản phẩm từ "Mua ngay", lấy sản phẩm từ giỏ hàng
+//     const cart = await Cart.findOne({
+//       _id: cartId
+//     });
+
+//     if (cart && cart.products.length > 0) {
+//       const products = cart.products;
+//       for (const item of products) {
+//         const infoItem = await Product.findOne({
+//           _id: item.productId
+//         });
+
+//         const finalPrice = parseFloat(infoItem.priceNew) || infoItem.price; // Sử dụng giá mới nếu có, nếu không có thì dùng giá gốc
+//         const total = finalPrice * item.quantity; // Thành tiền (giá mới x số lượng)
+
+//         dataOrder.products.push({
+//           productId: item.productId,
+//           price: finalPrice, // Giá mới
+//           discountPercentage: infoItem.discountPercentage || 0, // Phần trăm giảm giá
+//           quantity: item.quantity, // Số lượng
+//           finalPrice: finalPrice, // Giá sau giảm (nếu có)
+//           total: total // Thành tiền
+//         });
+//       }
+//     }
+//   }
+
+//   // Lưu đơn hàng vào cơ sở dữ liệu
+//   const newOrder = new Order(dataOrder);
+//   await newOrder.save();
+
+//   // Nếu có sản phẩm trong giỏ, xóa giỏ hàng sau khi đặt hàng (chỉ nếu không phải từ "Mua ngay")
+//   if (!req.body.productId && cartId) {
+//     await Cart.updateOne({
+//       _id: cartId
+//     }, {
+//       products: []
+//     });
+//   }
+
+//   res.redirect(`/order/success/${newOrder.id}`);
+// };
+
+
+
+
+
 module.exports.orderPost = async (req, res) => {
-  const cartId = req.cookies.cartId;
-  const order = req.body;
-  const dataOrder = {
-    fullName: order.fullName,
-    phone: order.phone,
-    address: order.address,
-    products: []
-  };
+  try {
+    const cartId = req.cookies.cartId;
+    const { fullName, phone, address, productId, quantity } = req.body;
 
-  // Kiểm tra xem có sản phẩm từ "Mua ngay" không
-  if (req.body.productId && req.body.quantity) {
-    const product = await Product.findOne({
-      _id: req.body.productId
-    });
-
-    if (product) {
-      const quantity = parseInt(req.body.quantity, 10); // Số lượng
-      const finalPrice = parseFloat(product.priceNew) || product.price; // Giá mới nếu có, nếu không có thì dùng giá gốc
-      const total = finalPrice * quantity; // Thành tiền (giá mới x số lượng)
-
-      // Thêm sản phẩm vào đơn hàng
-      const productOrder = {
-        productId: product._id,
-        price: finalPrice, // Giá mới
-        discountPercentage: product.discountPercentage || 0, // Phần trăm giảm giá
-        quantity: quantity, // Số lượng
-        finalPrice: finalPrice, // Giá sau giảm (nếu có)
-        total: total // Thành tiền
-      };
-
-      dataOrder.products.push(productOrder); // Thêm sản phẩm từ "Mua ngay"
-    }
-  } else {
-    // Nếu không có sản phẩm từ "Mua ngay", lấy sản phẩm từ giỏ hàng
-    const cart = await Cart.findOne({
-      _id: cartId
-    });
-
-    if (cart && cart.products.length > 0) {
-      const products = cart.products;
-      for (const item of products) {
-        const infoItem = await Product.findOne({
-          _id: item.productId
-        });
-
-        const finalPrice = parseFloat(infoItem.priceNew) || infoItem.price; // Sử dụng giá mới nếu có, nếu không có thì dùng giá gốc
-        const total = finalPrice * item.quantity; // Thành tiền (giá mới x số lượng)
-
-        dataOrder.products.push({
-          productId: item.productId,
-          price: finalPrice, // Giá mới
-          discountPercentage: infoItem.discountPercentage || 0, // Phần trăm giảm giá
-          quantity: item.quantity, // Số lượng
-          finalPrice: finalPrice, // Giá sau giảm (nếu có)
-          total: total // Thành tiền
-        });
-      }
-    }
-  }
-
-  // Lưu đơn hàng vào cơ sở dữ liệu
-  const newOrder = new Order(dataOrder);
-  await newOrder.save();
-
-  // Nếu có sản phẩm trong giỏ, xóa giỏ hàng sau khi đặt hàng (chỉ nếu không phải từ "Mua ngay")
-  if (!req.body.productId && cartId) {
-    await Cart.updateOne({
-      _id: cartId
-    }, {
+    const dataOrder = {
+      fullName,
+      phone,
+      address,
       products: []
-    });
-  }
+    };
 
-  res.redirect(`/order/success/${newOrder.id}`);
+    // Xử lý "Mua ngay"
+    if (productId && quantity) {
+      const product = await Product.findOne({ _id: productId });
+      if (!product) {
+        return res.status(404).send('Product not found');
+      }
+
+      const parsedQuantity = parseInt(quantity, 10);
+      const finalPrice = parseFloat(product.priceNew) || parseFloat(product.price); // Ưu tiên giá mới
+      const discount = product.discountPercentage || 0;
+      const discountedPrice = finalPrice * (1 - discount / 100); // Giá sau chiết khấu
+      const total = discountedPrice * parsedQuantity; // Thành tiền
+
+      dataOrder.products.push({
+        productId: product._id,
+        price: finalPrice,
+        discountPercentage: discount,
+        quantity: parsedQuantity,
+        finalPrice: discountedPrice,
+        total: total
+      });
+    } 
+    // Xử lý từ giỏ hàng
+    else if (cartId) {
+      const cart = await Cart.findOne({ _id: cartId });
+      if (!cart || cart.products.length === 0) {
+        return res.status(400).send('Cart is empty or invalid');
+      }
+
+      const productIds = cart.products.map(item => item.productId);
+      const productDetails = await Product.find({ _id: { $in: productIds } });
+
+      const productMap = productDetails.reduce((map, product) => {
+        map[product._id.toString()] = product;
+        return map;
+      }, {});
+
+      for (const item of cart.products) {
+        const product = productMap[item.productId];
+        if (product) {
+          const finalPrice = parseFloat(product.priceNew) || parseFloat(product.price); // Ưu tiên giá mới
+          const discount = product.discountPercentage || 0;
+          const discountedPrice = finalPrice * (1 - discount / 100); // Giá sau chiết khấu
+          const total = discountedPrice * item.quantity; // Thành tiền
+
+          dataOrder.products.push({
+            productId: product._id,
+            price: finalPrice,
+            discountPercentage: discount,
+            quantity: item.quantity,
+            finalPrice: discountedPrice,
+            total: total
+          });
+        }
+      }
+    } else {
+      return res.status(400).send('No product or cart data provided');
+    }
+
+    // Kiểm tra dữ liệu trước khi lưu
+    console.log('DataOrder before saving:', JSON.stringify(dataOrder, null, 2));
+
+    // Lưu vào bảng Order
+    const newOrder = new Order(dataOrder);
+    await newOrder.save();
+
+    // Xóa giỏ hàng sau khi đặt hàng thành công (nếu không phải "Mua ngay")
+    if (!productId && cartId) {
+      await Cart.updateOne({ _id: cartId }, { products: [] });
+    }
+
+    res.redirect(`/order/success/${newOrder.id}`);
+  } catch (error) {
+    console.error('Error processing order:', error);
+    res.status(500).send('An error occurred while processing your order');
+  }
 };
 
 
