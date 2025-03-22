@@ -1,7 +1,30 @@
+//- mixin product-item(item)
+//-   .col-6.mb-3
+//-     .product-item
+//-       .inner-image
+//-         a(href=`/products/detail/${item.slug}`) 
+//-           img(src=item.thumbnail, alt=item.title)
+//-       .inner-content
+//-         h3.inner-title
+//-           a(href=`/products/detail/${item.slug}`) #{item.title}
+//-         .inner-price-new 
+//-           | #{(parseFloat(item.priceNew) || 0).toLocaleString('vi-VN')}đ
+//-         if(item.price != item.priceNew)
+//-           .inner-price-old 
+//-             | #{(parseFloat(item.price) || 0).toLocaleString('vi-VN')}đ
+//-           .inner-discount 
+//-             | -#{(parseFloat(item.discountPercentage) || 0).toLocaleString('vi-VN')}%
+
+
+
 mixin product-item(item)
-  .col-6.mb-3
+  .col-3.mb-2
     .product-item
       .inner-image
+        // Phần giảm giá chuyển vào đây
+        if item.price != item.priceNew
+          .inner-discount 
+            | -#{(parseFloat(item.discountPercentage) || 0).toLocaleString('vi-VN')}%
         a(href=`/products/detail/${item.slug}`) 
           img(src=item.thumbnail, alt=item.title)
       .inner-content
@@ -12,8 +35,3 @@ mixin product-item(item)
         if(item.price != item.priceNew)
           .inner-price-old 
             | #{(parseFloat(item.price) || 0).toLocaleString('vi-VN')}đ
-          .inner-discount 
-            | -#{(parseFloat(item.discountPercentage) || 0).toLocaleString('vi-VN')}%
-
-
-
